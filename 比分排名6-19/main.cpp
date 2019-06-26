@@ -7,9 +7,80 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include <iomanip>
+using namespace std;
+
+ifstream stu("/Users/nianqingren/Desktop/accurac/stu.txt");
+ifstream juge("/Users/nianqingren/Desktop/accurac/juge.txt");
+ofstream final_s("/Users/nianqingren/Desktop/accurac/final.txt");
+
+struct student
+{
+    string school;
+    string name_s;
+    string num;
+    string phonenum;
+    double scor[7];
+    double ave;
+}s[10];
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+
+    int n=5;
+    
+    for(int i=0; i<n; i++)
+    {
+        stu >> s[i].school >> s[i].num >> s[i].name_s >>s[i].phonenum;
+        for(int j=0; j<7; j++)
+        {
+            juge >> s[i].scor[j];
+        }
+    }
+
+    for(int i=0; i<n; i++)
+    {
+        double sum=0;
+        double max=s[i].scor[0],min=s[i].scor[0];
+        for(int j=0; j<7; j++)
+        {
+            if(s[i].scor[j]>max)
+                max=s[i].scor[j];
+            
+            if(min>s[i].scor[j])
+                min=s[i].scor[j];
+            
+            sum+=s[i].scor[j];
+        }
+      //  cout << sum <<" "<<min <<" " << max <<endl;
+        s[i].ave=(sum-min-max)/5;
+    }
+    student sm;
+    for(int i=0; i<n; i++)
+    {
+        for(int j=i; j<n; j++)
+        {
+            if(s[i].ave<s[j].ave)
+            {
+                sm=s[j];
+                s[j]=s[i];
+                s[i]=sm;
+            }
+        }
+    }
+ 
+     final_s << left << setw(21) << "学院" << left << setw(23) << "学号" << left << setw(15) << "姓名" << left << setw(15) << "平均成绩" << "联系方式" << endl;
+    cout << left << setw(22) << "学院" << left << setw(22) << "学号" << left << setw(15) << "姓名" << left << setw(15) << "平均成绩" << "联系方式" << endl;
+
+    for(int i=0; i<n; i++)
+    {
+        final_s << left << setw(20) << s[i].school << left << setw(20) << s[i].num << left << setw(17) << s[i].name_s << left << setw(10) << s[i].ave << s[i].phonenum<<endl;
+        
+        cout << left << setw(20) << s[i].school << left << setw(20) << s[i].num << left << setw(15) << s[i].name_s << left << setw(10) << s[i].ave << s[i].phonenum << endl;
+    }
+
+    final_s.close();
     return 0;
 }
